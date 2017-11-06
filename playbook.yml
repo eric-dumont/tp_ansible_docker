@@ -1,0 +1,36 @@
+---
+- hosts: sshservers
+  remote_user: root
+  tasks:
+  - name: update
+    apt:
+    update_cache: yes
+
+  - name: Install nginx
+    apt: name=nginx state=latest
+    notify:
+
+  - name: Service Start nginx
+    shell: service nginx start
+  
+  - name: Install curl
+    apt: name=curl state=latest
+
+  - name: Install NodeJs & Npm
+    shell: curl -sL https://deb.nodesource.com/setup_8.x | bash && apt-get install -y nodejs
+
+  - name: Installer Git
+    shell: apt-get install git -y
+
+  - name: Création du dossier
+    shell: mkdir /var/www/my-node-project
+
+  - name: Copie du dépôt Git
+    shell: git clone https://git.mrzee.fr/studnet/my-node-project.git/var/www/my-node-project
+
+  - name: Installation globale de pm2
+    shell: npm install -g pm2 -y
+
+  - name: Démarrage de nginx
+    shell : service nginx start
+
